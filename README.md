@@ -1,36 +1,104 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Multi-Vendor E-Commerce Platform
 
-## Getting Started
+A scalable, modular multi-vendor e-commerce platform built with **Next.js App Router**, supporting multiple stores, vendor dashboards, and a unified frontend for users.
 
-First, run the development server:
+## 🔧 Tech Stack
+
+- **Frontend:** Next.js (App Router), Tailwind CSS
+- **Backend:** Node.js, Express / FastAPI (customizable)
+- **Database:** MongoDB / PostgreSQL
+- **Auth:** JWT / OAuth (Vendor & User login)
+- **Storage:** Cloudinary / AWS S3 (for product images)
+
+## 📁 Folder Structure
+```bash
+my-multivendor-project/
+├── app/
+│   ├── (auth)/                       # Authentication-related routes
+│   │   ├── login/page.tsx
+│   │   ├── signup/page.tsx
+│   │                                # Auth entry page (e.g., redirect or landing)
+│   │   └── layout.tsx               # Shared layout for auth
+│
+│   ├── (main-ui)/                   # Public-facing site UI
+│   │   ├── page.tsx                 # Home Page
+│   │   ├── layout.tsx               # Layout for public UI
+│   │   ├── all/page.tsx             # List all products
+│   │   ├── product/
+│   │   │   └── [productId]/page.tsx # Single product details
+│
+│   ├── (dashboard)/                 # Vendor Dashboard
+│   │   ├── dashboard/page.tsx       # Dashboard landing
+│   │   ├── products/page.tsx        # Vendor products CRUD
+│   │   ├── orders/page.tsx          # Vendor orders
+│   │   ├── profile/page.tsx         # Vendor profile
+│   │   └── layout.tsx               # Dashboard layout (different from UI/Auth)
+│
+│   ├── api/                         # API routes
+│   │   ├── auth/
+│   │   │   ├── login/route.ts
+│   │   │   └── signup/route.ts
+│   │   ├── products/
+│   │   │   ├── route.ts             # Product CRUD handlers
+│   │   └── users/route.ts
+│
+├── components/
+│   ├── ui/                          # Common reusable UI components
+│   │   ├── Header.tsx
+│   │   ├── Footer.tsx
+│   │   ├── ProductCard.tsx
+│   │   └── Button.tsx
+│   ├── dashboard/                  # Dashboard-specific components
+│   │   ├── DashboardNavbar.tsx
+│   │   └── ProductForm.tsx
+│   ├── auth/                       # Auth components (optional)
+│   │   └── AuthForm.tsx
+│
+├── types/                          # TypeScript types and interfaces
+│   ├── index.ts                    # Global types export
+│   ├── product.ts
+│   ├── user.ts
+│   └── order.ts
+│
+├── lib/                            # Custom libraries or helpers
+│   ├── auth.ts                     # Auth logic (e.g., session handling)
+│   ├── jwt.ts                      # JWT utilities
+│   └── fetcher.ts                  # Fetch wrapper (SWR, etc.)
+│
+├── utils/                          # Utility functions (formatting, validation)
+│   └── formatter.ts
+│
+├── database/                       # DB connection and seeders
+│   └── index.ts
+│
+├── models/                         # ORM Models (Prisma, Sequelize, etc.)
+│   ├── user.ts
+│   ├── product.ts
+│   └── order.ts
+│
+├── styles/
+│   ├── globals.css
+│   └── tailwind.config.js
+│
+├── .env.local
+├── package.json
+├── next.config.js
+├── tsconfig.json
+
+
+
+## ✨ Features
+
+- Vendor registration & store creation
+- Product listing by multiple vendors
+- Public product browsing
+- Vendor-specific dashboards
+- Order management (future scope)
+
+## 🚀 Getting Started
 
 ```bash
+git clone https://github.com/yourusername/multivendor-platform.git
+cd multivendor-platform
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
