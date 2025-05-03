@@ -11,12 +11,30 @@ export async function POST(req: NextRequest) {
     const { firstName, lastName, mobileNumber, email, password } =
       await req.json();
 
-    const existingUser = await User.findOne({ email });
-    if (existingUser) {
+    if (!firstName || !lastName || !mobileNumber || !email || !password) {
       return NextResponse.json(
-        { message: "User already exists" },
+        { message: "All fields are required" },
         { status: 400 }
       );
+    }
+
+    const existingUser = await User.findOne({
+      $or: [{ email }, { mobileNumber }],
+    });
+
+    if (existingUser) {
+      if (existingUser.email === email) {
+        return NextResponse.json(
+          { message: "Email already in use" },
+          { status: 400 }
+        );
+      }
+      if (existingUser.mobileNumber === mobileNumber) {
+        return NextResponse.json(
+          { message: "Mobile number already in use" },
+          { status: 400 }
+        );
+      }
     }
 
     const salt = await bcrypt.genSalt(10);
@@ -32,6 +50,7 @@ export async function POST(req: NextRequest) {
     });
 
     await newUser.save();
+
     const token = generateToken({
       _id: newUser._id.toString(),
       email: newUser.email,
@@ -39,12 +58,26 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json(
-      { message: "Registration successful", token },
+      {
+        message: "Registration successful",
+        token,
+        user: {
+          id: newUser._id,
+          email: newUser.email,
+          firstName: newUser.firstName,
+          lastName: newUser.lastName,
+          role: newUser.role,
+        },
+      },
       { status: 201 }
     );
   } catch (error) {
+    console.error("Registration error:", error);
     return NextResponse.json(
-      { message: "Something went wrong", error: (error as Error).message },
+      {
+        message: "Registration failed",
+        error: error instanceof Error ? error.message : "Unknown error",
+      },
       { status: 500 }
     );
   }
